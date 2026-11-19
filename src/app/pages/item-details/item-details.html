@@ -1,0 +1,223 @@
+<div class="details-page">
+  <div class="details-container">
+
+    <button
+      type="button"
+      class="back-button"
+      (click)="goBack()"
+    >
+      ← Back to Browse Items
+    </button>
+
+    @if (isLoading) {
+      <div class="not-found" role="status">
+        <h1>Loading item...</h1>
+        <p>Please wait while we load the item details.</p>
+      </div>
+    } @else if (errorMessage) {
+      <div class="not-found" role="alert">
+        <h1>Unable to Load Item</h1>
+        <p>{{ errorMessage }}</p>
+      </div>
+    } @else if (item) {
+      <div class="details-layout">
+
+        <div class="item-preview">
+          <div class="preview-glow"></div>
+          <span class="item-icon">{{ item.icon }}</span>
+          <div class="preview-label">
+            BORROWLOOP COLLECTION
+          </div>
+        </div>
+
+        <div class="item-information">
+          <span class="category-label">
+            {{ item.category }}
+          </span>
+
+          <h1>{{ item.name }}</h1>
+
+          <p class="item-description">
+            {{ item.description }}
+          </p>
+
+          <div
+            class="item-status"
+            [class.unavailable]="!item.available"
+          >
+            <span class="status-dot"></span>
+            {{ item.available
+              ? 'Available to Borrow'
+              : 'Currently Unavailable' }}
+          </div>
+
+          <div class="item-specifications">
+            <div class="specification">
+              <span class="spec-label">Item ID</span>
+              <span class="spec-value">{{ item.id }}</span>
+            </div>
+
+            <div class="specification">
+              <span class="spec-label">Category</span>
+              <span class="spec-value">{{ item.category }}</span>
+            </div>
+
+            <div class="specification">
+              <span class="spec-label">Condition</span>
+              <span class="spec-value">{{ item.condition }}</span>
+            </div>
+
+            <div class="specification">
+              <span class="spec-label">Availability</span>
+              <span class="spec-value">
+                {{ item.available ? 'Available' : 'Unavailable' }}
+              </span>
+            </div>
+          </div>
+
+          <div class="deposit-section">
+            <span class="deposit-label">SECURITY DEPOSIT</span>
+            <div class="deposit-amount">£{{ item.deposit }}</div>
+
+            <p class="deposit-note">
+              Check the lender’s terms before requesting this item.
+            </p>
+          </div>
+
+          @if (item.available) {
+            <form (ngSubmit)="requestBorrow()">
+
+              <fieldset
+                [disabled]="isSubmitting || requestSubmitted"
+                style="
+                  border: 0;
+                  padding: 0;
+                  margin: 0;
+                  display: grid;
+                  gap: 16px;
+                "
+              >
+                <legend style="margin-bottom: 16px;">
+                  Choose your borrowing dates
+                </legend>
+
+                <label for="startDate">Start date</label>
+                <input
+                  id="startDate"
+                  name="startDate"
+                  type="date"
+                  required
+                  [min]="today"
+                  [(ngModel)]="startDate"
+                  style="
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding: 14px;
+                    border-radius: 10px;
+                    border: 1px solid #315044;
+                    background: #101c17;
+                    color: white;
+                    color-scheme: dark;
+                    font: inherit;
+                  "
+                />
+
+                <label for="returnDate">Return date</label>
+                <input
+                  id="returnDate"
+                  name="returnDate"
+                  type="date"
+                  required
+                  [min]="startDate || today"
+                  [(ngModel)]="returnDate"
+                  style="
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding: 14px;
+                    border-radius: 10px;
+                    border: 1px solid #315044;
+                    background: #101c17;
+                    color: white;
+                    color-scheme: dark;
+                    font: inherit;
+                  "
+                />
+
+                <label for="borrowMessage">
+                  Message to the lender (optional)
+                </label>
+                <textarea
+                  id="borrowMessage"
+                  name="borrowMessage"
+                  rows="3"
+                  maxlength="1000"
+                  [(ngModel)]="message"
+                  placeholder="What do you need the item for?"
+                  style="
+                    width: 100%;
+                    box-sizing: border-box;
+                    padding: 14px;
+                    border-radius: 10px;
+                    border: 1px solid #315044;
+                    background: #101c17;
+                    color: white;
+                    font: inherit;
+                    resize: vertical;
+                  "
+                ></textarea>
+              </fieldset>
+
+              @if (requestError) {
+                <p
+                  role="alert"
+                  style="color: #ffb4b4; margin: 20px 0;"
+                >
+                  {{ requestError }}
+                </p>
+              }
+
+              @if (requestSuccess) {
+                <p
+                  role="status"
+                  style="color: #6ee7b7; margin: 20px 0;"
+                >
+                  {{ requestSuccess }}
+                </p>
+              }
+
+              <button
+                type="submit"
+                class="borrow-button"
+                [disabled]="isSubmitting || requestSubmitted"
+                style="margin-top: 20px;"
+              >
+                @if (isSubmitting) {
+                  Sending Request...
+                } @else if (requestSubmitted) {
+                  Request Recorded
+                } @else {
+                  Request to Borrow →
+                }
+              </button>
+
+            </form>
+          } @else {
+            <button
+              type="button"
+              class="borrow-button"
+              disabled
+            >
+              Currently Unavailable
+            </button>
+          }
+
+          <p class="security-note">
+            Requests are subject to the lender’s approval.
+          </p>
+        </div>
+
+      </div>
+    }
+
+  </div>
+</div>

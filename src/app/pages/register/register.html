@@ -1,0 +1,207 @@
+<div class="register-page">
+  <div class="register-container">
+
+    <div class="register-brand">
+      <a routerLink="/" class="brand-link">
+        <span class="brand-icon">↗</span>
+        <span>
+          BORROW<span class="brand-accent">LOOP</span>
+        </span>
+      </a>
+
+      <div class="brand-message">
+        <span class="eyebrow">JOIN THE COMMUNITY</span>
+
+        <h1>
+          Share more.<br>
+          Own less.<br>
+          <span>Live better.</span>
+        </h1>
+
+        <p>
+          Join BorrowLoop and discover a smarter way
+          to borrow everyday essentials, share your
+          belongings, and connect with your community.
+        </p>
+
+        <div class="brand-benefits">
+          <div class="benefit">
+            <span class="benefit-icon">✓</span>
+            Borrow items without buying them
+          </div>
+
+          <div class="benefit">
+            <span class="benefit-icon">✓</span>
+            Share items with your community
+          </div>
+
+          <div class="benefit">
+            <span class="benefit-icon">✓</span>
+            Reduce waste through reuse
+          </div>
+        </div>
+      </div>
+
+      <div class="brand-footer">
+        OWN LESS. EXPERIENCE MORE.
+      </div>
+    </div>
+
+    <div class="register-panel">
+      <div class="form-heading">
+        <span class="form-eyebrow">CREATE YOUR ACCOUNT</span>
+        <h2>Get started</h2>
+
+        <p>
+          Create your BorrowLoop account and join
+          our growing lending community.
+        </p>
+      </div>
+
+      <form (ngSubmit)="register()" #registerForm="ngForm">
+
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+
+          <input
+            id="fullName"
+            name="fullName"
+            type="text"
+            placeholder="Enter your full name"
+            autocomplete="name"
+            [(ngModel)]="fullName"
+            [disabled]="isLoading || accountCreated"
+            required
+            minlength="2"
+            maxlength="80"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+
+          <input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="you@example.com"
+            autocomplete="email"
+            [(ngModel)]="email"
+            [disabled]="isLoading || accountCreated"
+            required
+            email
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+
+          <div class="password-wrapper">
+            <input
+              id="password"
+              name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              placeholder="Create a password"
+              autocomplete="new-password"
+              [(ngModel)]="password"
+              [disabled]="isLoading || accountCreated"
+              aria-describedby="passwordHint"
+              required
+              minlength="8"
+            />
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="togglePassword()"
+              [attr.aria-label]="
+                showPassword ? 'Hide password' : 'Show password'
+              "
+            >
+              {{ showPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+
+          <p id="passwordHint" class="field-hint">
+            Use at least 8 characters, including a letter and a number.
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm Password</label>
+
+          <div class="password-wrapper">
+            <input
+              id="confirmPassword"
+              name="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              placeholder="Confirm your password"
+              autocomplete="new-password"
+              [(ngModel)]="confirmPassword"
+              [disabled]="isLoading || accountCreated"
+              required
+            />
+
+            <button
+              type="button"
+              class="password-toggle"
+              (click)="toggleConfirmPassword()"
+              [attr.aria-label]="
+                showConfirmPassword ? 'Hide password' : 'Show password'
+              "
+            >
+              {{ showConfirmPassword ? 'Hide' : 'Show' }}
+            </button>
+          </div>
+        </div>
+
+        @if (errorMessage) {
+          <div class="error-message" role="alert">
+            <span>✕</span>
+            {{ errorMessage }}
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="success-message" role="status">
+            <span class="success-icon">✓</span>
+
+            <div class="success-content">
+              <strong>Account Created!</strong>
+              <p>{{ successMessage }}</p>
+            </div>
+          </div>
+        }
+
+        <button
+          type="submit"
+          class="register-button"
+          [disabled]="isLoading || accountCreated"
+        >
+          @if (isLoading) {
+            Creating Account...
+          } @else if (accountCreated) {
+            Account Created
+          } @else {
+            Create Account
+            <span>→</span>
+          }
+        </button>
+
+      </form>
+
+      <div class="login-section">
+        <p>
+          Already have an account?
+          <a routerLink="/login">Sign In</a>
+        </p>
+      </div>
+
+      <div class="form-footer">
+        <span>SECURE COMMUNITY LENDING</span>
+        <a routerLink="/">Back to Home</a>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,176 @@
+<section class="items-page">
+
+  <div class="category-section">
+    <h2>Explore by Category</h2>
+
+    <div class="category-filters">
+      @for (category of categories; track category) {
+        <button
+          type="button"
+          class="category-btn"
+          [class.active]="selectedCategory === category"
+          (click)="selectCategory(category)"
+        >
+          {{ category }}
+        </button>
+      }
+    </div>
+  </div>
+
+  <div class="listings-section">
+
+    <div class="listings-header">
+      <div>
+        <span class="section-label">DISCOVER & BORROW</span>
+        <h2>Explore Available Items</h2>
+      </div>
+
+      <span class="items-count">
+        {{ totalItems }} available items
+      </span>
+    </div>
+
+    @if (isLoading) {
+      <p role="status">Loading items...</p>
+    }
+
+    @if (errorMessage) {
+      <div role="alert">
+        <p>{{ errorMessage }}</p>
+
+        <button type="button" (click)="loadItems(page)">
+          Try Again
+        </button>
+      </div>
+    }
+
+    <div class="items-grid" [attr.aria-busy]="isLoading">
+
+      @for (item of filteredItems; track item.id) {
+        <article class="item-card">
+
+          <div class="item-image">
+            <span class="item-icon">
+              {{ item.icon }}
+            </span>
+
+            <span
+              class="availability"
+              [class.available]="item.available"
+              [class.unavailable]="!item.available"
+            >
+              {{ item.available ? 'Available' : 'Unavailable' }}
+            </span>
+          </div>
+
+          <div class="item-details">
+            <span class="item-category">
+              {{ item.category }}
+            </span>
+
+            <h3>{{ item.name }}</h3>
+
+            <p>Condition: {{ item.condition }}</p>
+
+            <div class="item-footer">
+              <div class="deposit">
+                £{{ item.deposit }}
+                <small>deposit</small>
+              </div>
+
+              <button
+                type="button"
+                (click)="viewItemDetails(item.id)"
+              >
+                View Details →
+              </button>
+            </div>
+          </div>
+
+        </article>
+      } @empty {
+        @if (!isLoading && !errorMessage) {
+          <div class="no-items">
+            <h3>No items found</h3>
+            <p>
+              Try another search or category on this page.
+            </p>
+          </div>
+        }
+      }
+
+    </div>
+
+    <nav
+      aria-label="Item pages"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-top: 32px;
+      "
+    >
+      <button
+        type="button"
+        class="category-btn"
+        [disabled]="page <= 1 || isLoading"
+        (click)="previousPage()"
+      >
+        Previous
+      </button>
+
+      <span aria-live="polite">
+        Page {{ page }} of {{ totalPages }}
+      </span>
+
+      <button
+        type="button"
+        class="category-btn"
+        [disabled]="page >= totalPages || isLoading"
+        (click)="nextPage()"
+      >
+        Next
+      </button>
+    </nav>
+
+  </div>
+
+  <div class="items-container">
+
+    <span class="section-label">
+      THE BORROWLOOP COLLECTION
+    </span>
+
+    <h1>
+      Discover Something
+      <span>Extraordinary.</span>
+    </h1>
+
+    <p>
+      Explore useful items shared by your community.
+      Borrow what you need, whenever you need it.
+    </p>
+
+    <div class="search-container">
+      <input
+        #searchInput
+        type="text"
+        [value]="searchTerm"
+        placeholder="Search items on this page..."
+        aria-label="Search items on this page"
+        (keyup.enter)="searchItems(searchInput.value)"
+      />
+
+      <button
+        type="button"
+        (click)="searchItems(searchInput.value)"
+      >
+        Search Items →
+      </button>
+    </div>
+
+  </div>
+
+</section>

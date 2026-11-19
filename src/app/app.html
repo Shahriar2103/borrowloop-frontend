@@ -1,0 +1,43 @@
+@if (showNavigation) {
+  <header class="navbar">
+    <div class="nav-container">
+
+      <a routerLink="/" class="logo">
+        <span class="logo-icon">↗</span>
+        BorrowLoop
+      </a>
+
+      <nav class="nav-links" aria-label="Main navigation">
+        <a routerLink="/">Home</a>
+        <a routerLink="/items">Browse Items</a>
+      </nav>
+
+      <div class="nav-actions">
+        @if (currentUser; as user) {
+          <span class="user-name">
+            Hi, {{ user.name }}
+          </span>
+
+          <button
+            type="button"
+            class="logout-btn"
+            (click)="logout()"
+          >
+            Log Out
+          </button>
+        } @else {
+          <a routerLink="/login" class="login-btn">
+            Log In
+          </a>
+
+          <a routerLink="/register" class="signup-btn">
+            Sign Up
+          </a>
+        }
+      </div>
+
+    </div>
+  </header>
+}
+
+<router-outlet></router-outlet>
